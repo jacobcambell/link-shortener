@@ -6,6 +6,13 @@ export const typeDefs = gql`
     }
 
     type Mutation {
-        none: String!
+        createShortLink(destination: String!): String
+    }
+
+    type Link {
+        id: ID!
+        owner_id: ID
+        destination: String!
+        shortlink: String!
     }
 `
