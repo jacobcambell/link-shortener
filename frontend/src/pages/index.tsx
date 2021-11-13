@@ -2,8 +2,37 @@ import * as React from "react"
 import '../styles/index.scss'
 import { Link } from 'gatsby'
 import { IoAnalyticsOutline, IoLinkOutline, IoLaptopOutline } from 'react-icons/io5'
+import { gql, useMutation } from '@apollo/client'
+
+const CREATE_SHORTLINK = gql`
+    mutation create($destination: String!) {
+      createShortLink(destination: $destination) {
+        ... on Error {
+          errorMessage
+        }
+
+        ... on Link {
+          destination
+          shortlink
+        }
+      }
+    }
+  `
 
 const IndexPage = () => {
+  const [link, setLink] = React.useState<string>('')
+
+  const [createShortLink, { data }] = useMutation(CREATE_SHORTLINK)
+
+  const onShortenClick = () => {
+    createShortLink({
+      variables: {
+        destination: link
+      }
+    })
+  }
+
+
   return (
     <div>
       <div className='navbar'>
@@ -12,13 +41,21 @@ const IndexPage = () => {
 
       <div className="jumbo">
         <p className="title">Easily Create Short Links</p>
-        {/* <p className="desc">Sign up for a free account to name, save, and view analytics on all your links.</p>
-        <a href="" className="signup">Sign Up Free</a> */}
 
         <div className="row">
-          <input type="text" className="link" placeholder="Paste your link" />
-          <button className="btn">Shorten</button>
+          <input onChange={(e) => { setLink(e.target.value) }} type="text" className="link" placeholder="Paste your link" />
+          <button className="btn" onClick={onShortenClick}>Shorten</button>
         </div>
+
+        {
+          data?.createShortLink.__typename === 'Error' &&
+          <p className="error">{data.createShortLink.errorMessage}</p>
+        }
+
+        {
+          data?.createShortLink.__typename === 'Link' &&
+          <p className="success">{data.createShortLink.shortlink}</p>
+        }
 
         <div className="box">
           <p className="title">Create a FREE Account For More Features!</p>
@@ -38,7 +75,7 @@ const IndexPage = () => {
             </div>
           </div>
 
-          <Link to='/register' className="signup">Sign Up</Link>
+          <Link to='/' className="signup">Sign Up</Link>
         </div>
       </div>
     </div>
