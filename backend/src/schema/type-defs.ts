@@ -6,7 +6,11 @@ export const typeDefs = gql`
     }
 
     type Mutation {
-        createShortLink(destination: String!): Link!
+        createShortLink(destination: String!): createShortLinkResults!
+    }
+
+    type Error {
+        errorMessage: String!
     }
 
     type Link {
@@ -15,4 +19,6 @@ export const typeDefs = gql`
         destination: String!
         shortlink: String!
     }
+
+    union createShortLinkResults = Link | Error
 `
