@@ -15,7 +15,7 @@ export const resolvers = {
             }
             else {
                 // Valid url not provided
-                return null;
+                return { errorMessage: 'Please provide a valid URL' };
             }
 
             // Get a short link that is not in use
@@ -42,6 +42,17 @@ export const resolvers = {
                         shortlink: results.rows[0].shortlink
                     }
                 }
+            }
+        }
+    },
+    createShortLinkResults: {
+        __resolveType: (obj) => {
+            if (obj.errorMessage) {
+                return 'Error'
+            }
+
+            if (obj.shortlink) {
+                return 'Link'
             }
         }
     }
