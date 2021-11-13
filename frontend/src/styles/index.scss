@@ -1,3 +1,9 @@
+$centerWidth: 800px;
+
+/* Colors */
+$platinum: #e0e1dd;
+$darktext: #a9adc1;
+
 .navbar {
     background: #0d1b2a;
     display: flex;
@@ -20,40 +26,24 @@
     justify-content: center;
 
     .title {
-        color: #e0e1dd;
-        font-size: 24px;
-    }
-
-    .desc {
-        color: #e0e1dd;
-        font-weight: 300;
-        font-size: 20px;
-        padding-bottom: 10px;
-    }
-
-    .signup {
-        background: #fff;
-        padding: 10px 25px;
-        color: black;
-        border-radius: 25px;
+        color: $platinum;
+        font-size: 28px;
     }
 
     .row {
-        width: 800px;
+        width: $centerWidth;
         display: flex;
         margin: 25px 0;
 
         input.link {
             background: transparent;
-            border: 1px solid #e0e1dd;
+            border: 1px solid;
             font-size: 18px;
             padding: 10px 15px;
-            border-radius: 15px;
             color: #c8c8c8;
             display: inline-block;
             flex: 4;
-            box-sizing: border-box;
-            margin-right: 15px;
+            margin-right: 10px;
         }
 
         input.link::placeholder {
@@ -65,10 +55,62 @@
             flex: 1;
             font-size: 20px;
             background: #415a77;
-            color: white;
-            border: none;
-            border-radius: 15px;
+            color: $platinum;
+            border: 1px solid #415a77;
             cursor: pointer;
+        }
+    }
+
+    .box {
+        background: #0d1b2a;
+        width: $centerWidth;
+        border: 1px solid #09121c;
+        margin: 50px 0;
+        padding: 15px 25px;
+
+        .title {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .featureRow {
+            display: flex;
+            margin-top: 25px;
+
+            .feature {
+                flex: 1;
+
+                .feature-title {
+                    color: $platinum;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 18px;
+
+                    svg {
+                        font-size: 20px;
+                        margin-right: 10px;
+                    }
+                }
+
+                .feature-desc {
+                    color: $darktext;
+                    text-align: center;
+                    padding: 5px 15px 0;
+                    box-sizing: border-box;
+                }
+            }
+        }
+
+        .signup {
+            font-size: 20px;
+            background: #415a77;
+            color: $platinum;
+            border: 1px solid #415a77;
+            cursor: pointer;
+            padding: 5px 15px;
+            display: table;
+            margin: 25px auto 0;
         }
     }
 }

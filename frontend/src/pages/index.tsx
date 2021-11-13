@@ -1,6 +1,7 @@
 import * as React from "react"
 import '../styles/index.scss'
 import { Link } from 'gatsby'
+import { IoAnalyticsOutline, IoLinkOutline, IoLaptopOutline } from 'react-icons/io5'
 
 const IndexPage = () => {
   return (
@@ -17,6 +18,27 @@ const IndexPage = () => {
         <div className="row">
           <input type="text" className="link" placeholder="Paste your link" />
           <button className="btn">Shorten</button>
+        </div>
+
+        <div className="box">
+          <p className="title">Create a FREE Account For More Features!</p>
+
+          <div className="featureRow">
+            <div className="feature">
+              <p className="feature-title"><IoAnalyticsOutline /> Analytics</p>
+              <p className="feature-desc">Track everything from number of clicks, time clicked, user agent, and more.</p>
+            </div>
+            <div className="feature">
+              <p className="feature-title"><IoLaptopOutline /> Management</p>
+              <p className="feature-desc">Manage all your links in one easy to use dashboard. Add, modify and delete links with ease.</p>
+            </div>
+            <div className="feature">
+              <p className="feature-title"><IoLinkOutline /> Redirects</p>
+              <p className="feature-desc">Reroute your users to a new location right from the dashboard.</p>
+            </div>
+          </div>
+
+          <Link to='/register' className="signup">Sign Up</Link>
         </div>
       </div>
     </div>
