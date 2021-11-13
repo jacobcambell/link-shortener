@@ -28,15 +28,21 @@ export const resolvers = {
 
                 if (Number(results.rows[0].c) === 0) {
                     // Link does not exist, so we are good to create it (using null owner since it was created by an anonymous user)
-                    const sql = `INSERT INTO links (owner_id, destination, shortlink) VALUES (NULL, $1, $2)`;
+                    const sql = `INSERT INTO links (owner_id, destination, shortlink) VALUES (NULL, $1, $2) RETURNING id, destination, shortlink`;
                     const values = [args.destination, shortCode];
-                    await client.query(sql, values)
+                    let results = await client.query(sql, values)
 
                     // Mark link as found
                     foundLink = true;
+
+                    // Return this link
+                    return {
+                        id: results.rows[0].id,
+                        destination: results.rows[0].destination,
+                        shortlink: results.rows[0].shortlink
+                    }
                 }
             }
-            // client.query(sql, values)
         }
     }
 }
