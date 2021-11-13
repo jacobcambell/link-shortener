@@ -27,4 +27,7 @@ export const prependHttps = (url: string) => {
         // Url doesn't start with either http or https, so we'll add https
         return `https://${url}`;
     }
+
+    // Should never reach this point, but adds return type for typescript
+    return 'https://none.com';
 }
