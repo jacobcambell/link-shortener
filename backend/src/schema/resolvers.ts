@@ -1,5 +1,6 @@
 import { client } from '../queries';
 import { generateShortLink } from '../generate';
+import { validURL, prependHttps } from '../linktools'
 
 export const resolvers = {
     Query: {
@@ -7,6 +8,16 @@ export const resolvers = {
     },
     Mutation: {
         createShortLink: async (parent, args: { destination: string }) => {
+            // Ensure valid destination is provided
+            if (validURL(args.destination)) {
+                // URL is valid, run through https prepend
+                args.destination = prependHttps(args.destination);
+            }
+            else {
+                // Valid url not provided
+                return null;
+            }
+
             // Get a short link that is not in use
             let foundLink = false;
             while (!foundLink) {
