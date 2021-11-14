@@ -1,6 +1,9 @@
 import { client } from '../queries';
 import { generateShortLink } from '../generate';
 import { validURL, prependHttps } from '../linktools'
+import * as EmailValidator from 'email-validator'
+import jsonwebtoken from 'jsonwebtoken'
+import CryptoJS from 'crypto-js';
 
 export const resolvers = {
     Query: {
@@ -46,6 +49,45 @@ export const resolvers = {
                     }
                 }
             }
+        },
+        registerAccount: async (parent, args: { email: string, password: string }) => {
+            // user sent email, password
+            // return either {token} or {errorMessage}
+
+            // Email validation
+            if (!EmailValidator.validate(args.email)) {
+                return { errorMessage: 'Please provide a valid email address' }
+            }
+
+            // Password validation
+            if (args.password.length < 6) {
+                return { errorMessage: 'Your password should be at least 6 characters' }
+            }
+
+            if (args.password.length > 32) {
+                return { errorMessage: 'Your password should not be more than 32 characters' }
+            }
+
+            // Check if this email already exists in the database
+            let results = await client.query('SELECT COUNT(*) AS c FROM users WHERE email=$1', [args.email])
+
+            if (Number(results.rows[0].c) > 0) {
+                return { errorMessage: 'Email already exists' }
+            }
+
+            // Hash the user's password
+            const hashed_password = CryptoJS.SHA256(args.password).toString()
+
+            // Create the user in the database
+            const c = await client.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id', [args.email, hashed_password])
+
+            // Save the user's ID
+            const user_id = c.rows[0].id;
+
+            // Sign jwt for this user, send back to them with their user id
+            const jwt = jsonwebtoken.sign({ user_id }, process.env.JWT_SECRET)
+
+            return { token: jwt }
         }
     },
     createShortLinkResults: {
@@ -58,5 +100,21 @@ export const resolvers = {
                 return 'Link'
             }
         }
+    },
+    registerAccountResults: {
+        __resolveType: (obj) => {
+            if (obj.token) {
+                return 'JWT'
+            }
+
+            if (obj.errorMessage) {
+                return 'Error'
+            }
+        }
     }
+}
+
+const validateEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }
