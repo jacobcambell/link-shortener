@@ -8,6 +8,9 @@ export const resolvers = {
     },
     Mutation: {
         createShortLink: async (parent, args: { destination: string }) => {
+            // Trim potential whitespace off destination
+            args.destination = args.destination.trim()
+
             // Ensure valid destination is provided
             if (validURL(args.destination)) {
                 // URL is valid, run through https prepend
