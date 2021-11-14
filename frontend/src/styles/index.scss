@@ -12,7 +12,12 @@ $darktext: #a9adc1;
     padding: 0 25px;
 
     .logo {
-        color: white;
+        display: block;
+
+        img {
+            width: 35px;
+            height: 35px;
+        }
     }
 }
 
@@ -24,6 +29,13 @@ $darktext: #a9adc1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    .logo {
+        width: 70px;
+        height: 70px;
+        display: block;
+        margin-bottom: 25px;
+    }
 
     .title {
         color: $platinum;

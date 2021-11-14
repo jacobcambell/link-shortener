@@ -36,10 +36,14 @@ const IndexPage = () => {
   return (
     <div>
       <div className='navbar'>
-        <Link to='/' className='logo'>xxd.pw</Link>
+        <Link to='/' className='logo'>
+          <img src={`logo.png`} alt="Logo" className='logo' />
+        </Link>
       </div>
 
       <div className="jumbo">
+        <img src={`logo.png`} alt="Logo" className='logo' />
+
         <p className="title">Easily Create Short Links</p>
 
         <div className="row">
