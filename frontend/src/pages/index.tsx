@@ -2,6 +2,7 @@ import * as React from "react"
 import '../styles/index.scss'
 import { Link } from 'gatsby'
 import { IoAnalyticsOutline, IoLinkOutline, IoLaptopOutline } from 'react-icons/io5'
+import { FaSpinner } from 'react-icons/fa'
 import { gql, useMutation } from '@apollo/client'
 
 const CREATE_SHORTLINK = gql`
@@ -22,7 +23,7 @@ const CREATE_SHORTLINK = gql`
 const IndexPage = () => {
   const [link, setLink] = React.useState<string>('')
 
-  const [createShortLink, { data }] = useMutation(CREATE_SHORTLINK)
+  const [createShortLink, { data, loading }] = useMutation(CREATE_SHORTLINK)
 
   const onShortenClick = () => {
     createShortLink({
@@ -48,7 +49,7 @@ const IndexPage = () => {
 
         <div className="row">
           <input onChange={(e) => { setLink(e.target.value) }} type="text" className="link" placeholder="Paste your link" />
-          <button className="btn" onClick={onShortenClick}>Shorten</button>
+          <button className="btn" onClick={onShortenClick}>{loading ? <FaSpinner className="spinner" /> : 'Shorten'}</button>
         </div>
 
         {
