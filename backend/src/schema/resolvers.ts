@@ -2,7 +2,7 @@ import { client } from '../queries';
 import { validURL, prependHttps, generateShortLink } from '../linktools'
 import * as EmailValidator from 'email-validator'
 import jsonwebtoken from 'jsonwebtoken'
-import CryptoJS from 'crypto-js';
+import bcrypt from 'bcrypt'
 
 export const resolvers = {
     Query: {
@@ -75,7 +75,8 @@ export const resolvers = {
             }
 
             // Hash the user's password
-            const hashed_password = CryptoJS.SHA256(args.password).toString()
+            // const hashed_password = CryptoJS.SHA256(args.password).toString()
+            const hashed_password = await bcrypt.hash(args.password, 10);
 
             // Create the user in the database
             const c = await client.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id', [args.email, hashed_password])
