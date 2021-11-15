@@ -1,8 +1,8 @@
-import * as React from "react"
+import React, { useState } from "react"
 import '../styles/index.scss'
 import { Link } from 'gatsby'
 import { IoAnalyticsOutline, IoLinkOutline, IoLaptopOutline } from 'react-icons/io5'
-import { FaSpinner } from 'react-icons/fa'
+import { FaSpinner, FaCopy } from 'react-icons/fa'
 import { gql, useMutation } from '@apollo/client'
 import Navbar from "../components/Navbar/Navbar"
 
@@ -14,7 +14,6 @@ const CREATE_SHORTLINK = gql`
         }
 
         ... on Link {
-          destination
           shortlink
         }
       }
@@ -22,16 +21,37 @@ const CREATE_SHORTLINK = gql`
   `
 
 const IndexPage = () => {
-  const [link, setLink] = React.useState<string>('')
+  // The link entered into the input by the user
+  const [link, setLink] = useState<string>('')
 
-  const [createShortLink, { data, loading }] = useMutation(CREATE_SHORTLINK)
+  // The shortlink that will be returned after the api call
+  const [shortlink, setShortlink] = useState<string | undefined>()
+
+  // A short message telling the user when they have copied to the clipboard
+  const [clipboardStatus, setClipboardStatus] = useState('Your shortlink is ready!')
+
+  const [createShortLink, { data, loading }] = useMutation(CREATE_SHORTLINK, {
+    onCompleted: (data) => {
+      if (data.createShortLink.shortlink) {
+        setShortlink(data.createShortLink.shortlink)
+      }
+    }
+  })
 
   const onShortenClick = () => {
+    setClipboardStatus('Your shortlink is ready!')
+    setShortlink(undefined)
+
     createShortLink({
       variables: {
         destination: link
       }
     })
+  }
+
+  const onCopyClick = () => {
+    setClipboardStatus('Copied to clipboard!')
+    navigator.clipboard.writeText('https://xxd.pw/' + shortlink)
   }
 
 
@@ -49,13 +69,15 @@ const IndexPage = () => {
         </div>
 
         {
+          shortlink &&
+          <div className="readyBox">
+            <p className="header">{clipboardStatus}</p>
+            <p className="link">{`xxd.pw/${shortlink}`} <FaCopy onClick={onCopyClick} /></p>
+          </div>
+        }
+        {
           data?.createShortLink.__typename === 'Error' &&
           <p className="error">{data.createShortLink.errorMessage}</p>
-        }
-
-        {
-          data?.createShortLink.__typename === 'Link' &&
-          <p className="success">{data.createShortLink.shortlink}</p>
         }
 
         <div className="box">
