@@ -4,6 +4,7 @@ import { Link } from 'gatsby'
 import { IoAnalyticsOutline, IoLinkOutline, IoLaptopOutline } from 'react-icons/io5'
 import { FaSpinner } from 'react-icons/fa'
 import { gql, useMutation } from '@apollo/client'
+import Navbar from "../components/Navbar/Navbar"
 
 const CREATE_SHORTLINK = gql`
     mutation create($destination: String!) {
@@ -36,12 +37,7 @@ const IndexPage = () => {
 
   return (
     <div>
-      <div className='navbar'>
-        <Link to='/' className='logo'>
-          <img src={`logo.png`} alt="Logo" className='logo' />
-        </Link>
-      </div>
-
+      <Navbar />
       <div className="jumbo">
         <img src={`logo.png`} alt="Logo" className='logo' />
 
@@ -80,7 +76,7 @@ const IndexPage = () => {
             </div>
           </div>
 
-          <Link to='/' className="signup">Sign Up</Link>
+          <Link to='/signup' className="signup">Sign Up</Link>
         </div>
       </div>
     </div>
