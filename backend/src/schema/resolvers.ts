@@ -75,7 +75,6 @@ export const resolvers = {
             }
 
             // Hash the user's password
-            // const hashed_password = CryptoJS.SHA256(args.password).toString()
             const hashed_password = await bcrypt.hash(args.password, 10);
 
             // Create the user in the database
