@@ -4,23 +4,6 @@ $centerWidth: 800px;
 $platinum: #e0e1dd;
 $darktext: #a9adc1;
 
-.navbar {
-    background: #0d1b2a;
-    display: flex;
-    align-items: center;
-    height: 50px;
-    padding: 0 25px;
-
-    .logo {
-        display: block;
-
-        img {
-            width: 35px;
-            height: 35px;
-        }
-    }
-}
-
 .jumbo {
     background: linear-gradient(-45deg, rgba(13, 27, 42, 1) 0%, rgba(27, 38, 59, 1) 80%);
 
