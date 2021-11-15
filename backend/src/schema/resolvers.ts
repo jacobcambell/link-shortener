@@ -1,6 +1,5 @@
 import { client } from '../queries';
-import { generateShortLink } from '../generate';
-import { validURL, prependHttps } from '../linktools'
+import { validURL, prependHttps, generateShortLink } from '../linktools'
 import * as EmailValidator from 'email-validator'
 import jsonwebtoken from 'jsonwebtoken'
 import CryptoJS from 'crypto-js';

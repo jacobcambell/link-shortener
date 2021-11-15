@@ -1,4 +1,4 @@
-import { validURL, prependHttps } from '../linktools'
+import { validURL, prependHttps, generateShortLink } from '../linktools'
 
 test('Should be a valid URL ', () => {
     expect(validURL('google.com')).toBe(true)
@@ -20,4 +20,9 @@ test('Should prepend with https:// (if not existing) and replace http with https
     expect(prependHttps('http://google.com')).toBe('https://google.com')
     expect(prependHttps('web.google.com')).toBe('https://web.google.com')
     expect(prependHttps('http://web.google.com/test/file')).toBe('https://web.google.com/test/file')
+})
+
+test('Should return a random 7 character string', () => {
+    expect(generateShortLink()).toHaveLength(7)
+    expect(generateShortLink()).toHaveLength(7)
 })
