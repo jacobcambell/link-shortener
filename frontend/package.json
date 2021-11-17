@@ -16,8 +16,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.17",
-    "gatsby": "^4.1.0",
-    "gatsby-plugin-sass": "^5.1.1",
+    "gatsby": "^4.2.0",
+    "gatsby-plugin-apollo": "^3.0.2",
+    "gatsby-plugin-sass": "^5.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.3.1",
