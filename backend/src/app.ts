@@ -12,10 +12,10 @@ server.listen({ port: process.env.GRAPHQL_SERVER_PORT }).then(({ port }) => {
 })
 
 // Express
-import Express from 'express'
+import Express, { Request, Response } from 'express'
 const app = Express()
 
-app.get('/:shortlink', (req: Express.Request, res: Express.Response) => {
+app.get('/:shortlink', (req: Request, res: Response) => {
     const shortlink = req.params.shortlink;
 
     // Get the destination from this shortlink
