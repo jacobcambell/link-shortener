@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Navbar from '../components/Navbar/Navbar'
 import { gql, useMutation } from '@apollo/client'
 import { FaSpinner } from 'react-icons/fa'
+import logo from '../images/logo.png'
 
 const REGISTER_ACCOUNT = gql`
     mutation register($email: String!, $password: String!) {
@@ -53,7 +54,7 @@ export default function Signup() {
             <Navbar />
 
             <div className="flex items-center flex-col justify-center pb-8 text-oxfordblue w-11/12 lg:w-3/4 2xl:w-1/3 m-auto">
-                <img src={`logo.png`} alt="Logo" className='w-20 my-4' />
+                <img src={logo} alt="Logo" className='w-20 my-4' />
 
                 <p className="text-oxfordblue text-2xl mb-3">Sign Up</p>
                 <p className="text-oxfordblue mb-10">Get access to features like analytics and redirection mangement. 100% free.</p>

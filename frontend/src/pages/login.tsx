@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar/Navbar';
 import { FaSpinner } from 'react-icons/fa'
+import logo from '../images/logo.png'
 
 export default function login() {
     const [email, setEmail] = useState('')
@@ -13,7 +14,7 @@ export default function login() {
             <Navbar />
 
             <div className="flex items-center flex-col justify-center pb-8 text-oxfordblue w-11/12 lg:w-3/4 2xl:w-1/3 m-auto">
-                <img src={`logo.png`} alt="Logo" className='w-20 my-4' />
+                <img src={logo} alt="Logo" className='w-20 my-4' />
 
                 <p className="text-oxfordblue text-2xl mb-3">Log In</p>
 

@@ -4,6 +4,7 @@ import { IoAnalyticsOutline, IoLinkOutline, IoLaptopOutline } from 'react-icons/
 import { FaSpinner, FaCopy } from 'react-icons/fa'
 import { gql, useMutation } from '@apollo/client'
 import Navbar from "../components/Navbar/Navbar"
+import logo from '../images/logo.png'
 
 const CREATE_SHORTLINK = gql`
     mutation create($destination: String!) {
@@ -58,7 +59,7 @@ const IndexPage = () => {
     <div>
       <Navbar />
       <div className="flex items-center flex-col justify-center pb-8 text-oxfordblue w-11/12 lg:w-3/4 2xl:w-1/2 m-auto">
-        <img src={`logo.png`} alt="Logo" className='w-20 my-4' />
+        <img src={logo} alt="Logo" className='w-20 my-4' />
 
         <p className="text-2xl">Easily Create Short Links</p>
 
