@@ -87,6 +87,34 @@ export const resolvers = {
             const jwt = jsonwebtoken.sign({ user_id }, process.env.JWT_SECRET)
 
             return { token: jwt }
+        },
+        login: async (parent, args: { email: string, password: string }) => {
+            // Validate email
+            if (!EmailValidator.validate(args.email)) {
+                return { errorMessage: 'Please provide a valid email address' }
+            }
+
+            // Get this user's password from the database
+            let results = await client.query('SELECT id, password FROM users WHERE email=$1', [args.email])
+
+            if (results.rows.length === 0) {
+                // No password found for the given email/user
+                return { errorMessage: 'No user with that email address found' }
+            }
+
+            const user_id = results.rows[0].id;
+            const user_password = results.rows[0].password;
+
+            // Compare given password to database password
+            let match = await bcrypt.compare(args.password, user_password);
+
+            if (match) {
+                // Successful login, create JWT for this user and return to them
+                const jwt = jsonwebtoken.sign({ user_id }, process.env.JWT_SECRET)
+                return { token: jwt }
+            } else {
+                return { errorMessage: 'Incorrect email or password ' }
+            }
         }
     },
     createShortLinkResults: {
@@ -101,6 +129,17 @@ export const resolvers = {
         }
     },
     registerAccountResults: {
+        __resolveType: (obj) => {
+            if (obj.token) {
+                return 'JWT'
+            }
+
+            if (obj.errorMessage) {
+                return 'Error'
+            }
+        }
+    },
+    loginResults: {
         __resolveType: (obj) => {
             if (obj.token) {
                 return 'JWT'

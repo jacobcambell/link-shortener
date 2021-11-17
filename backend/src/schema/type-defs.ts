@@ -8,6 +8,7 @@ export const typeDefs = gql`
     type Mutation {
         createShortLink(destination: String!): createShortLinkResults!
         registerAccount(email: String!, password: String!): registerAccountResults!
+        login(email: String!, password: String!): loginResults!
     }
 
     type Error {
@@ -27,4 +28,5 @@ export const typeDefs = gql`
 
     union createShortLinkResults = Link | Error
     union registerAccountResults = JWT | Error
+    union loginResults = JWT | Error
 `
