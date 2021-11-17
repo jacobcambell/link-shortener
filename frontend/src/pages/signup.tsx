@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar/Navbar'
-import '../styles/signup.scss'
 import { gql, useMutation } from '@apollo/client'
 import { FaSpinner } from 'react-icons/fa'
 
@@ -47,25 +46,33 @@ export default function Signup() {
         })
     }
 
+    const inputStyle = 'w-full border-cadetgrey border-0 border-b block my-3 py-2 text-oxfordblue select-none focus:outline-none placeholder-cadetgrey';
+
     return (
-        <div className="signup">
+        <div>
             <Navbar />
 
-            <div className="form">
-                <img src={`logo.png`} alt="Logo" className='logo' />
+            <div className="flex items-center flex-col justify-center pb-8 text-oxfordblue w-11/12 lg:w-3/4 2xl:w-1/3 m-auto">
+                <img src={`logo.png`} alt="Logo" className='w-20 my-4' />
 
-                <p className="title">Sign Up</p>
-                <p className="desc">Get access to features like analytics and redirection mangement. 100% free.</p>
+                <p className="text-oxfordblue text-2xl mb-3">Sign Up</p>
+                <p className="text-oxfordblue mb-10">Get access to features like analytics and redirection mangement. 100% free.</p>
 
-                <input onChange={e => { setEmail(e.target.value) }} type="text" className="field" placeholder="Email" />
-                <input onChange={e => { setPassword(e.target.value) }} type="password" className="field" placeholder="Password" />
-                <input onChange={e => { setConfirmPassword(e.target.value) }} type="password" className="field" placeholder="Confirm Password" />
+                <input onChange={e => { setEmail(e.target.value) }} type="text" placeholder="Email"
+                    className={inputStyle}
+                />
+                <input onChange={e => { setPassword(e.target.value) }} type="password" placeholder="Password"
+                    className={inputStyle}
+                />
+                <input onChange={e => { setConfirmPassword(e.target.value) }} type="password" placeholder="Confirm Password"
+                    className={inputStyle}
+                />
 
                 {
-                    data?.registerAccount && <p className="error">{data?.registerAccount.errorMessage}</p>
+                    data?.registerAccount && <p className="text-red-500 mb-3">{data?.registerAccount.errorMessage}</p>
                 }
 
-                <button onClick={handleClick} className="btn-signup">{loading ? <FaSpinner className="spinner" /> : 'Sign Up'}</button>
+                <button onClick={handleClick} className="bg-azure my-3 px-3 py-2 w-full text-white">{loading ? <FaSpinner className="spinner m-auto" /> : 'Sign Up'}</button>
             </div>
         </div>
     )
