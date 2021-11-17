@@ -9,10 +9,12 @@ module.exports = {
   },
   plugins: ['gatsby-plugin-postcss'],
   theme: {
-    colors: {
-      oxfordblue: '#102752',
-      azure: '#117FE7',
-      cadetgrey: '#939AA3'
+    extend: {
+      colors: {
+        oxfordblue: '#102752',
+        azure: '#117FE7',
+        cadetgrey: '#939AA3'
+      }
     }
   }
 }
