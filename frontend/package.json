@@ -22,5 +22,11 @@
     "react-dom": "^17.0.1",
     "react-icons": "^4.3.1",
     "sass": "^1.43.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "gatsby-plugin-postcss": "^5.2.0",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^2.2.19"
   }
 }
