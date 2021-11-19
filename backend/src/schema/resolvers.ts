@@ -1,8 +1,8 @@
-import { client } from '../queries';
 import { validURL, prependHttps, generateShortLink } from '../linktools'
 import * as EmailValidator from 'email-validator'
 import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import { pg } from '../knex'
 
 export const resolvers = {
     Query: {
@@ -29,22 +29,20 @@ export const resolvers = {
                 let shortCode = generateShortLink();
 
                 // Check if this short link exists in the database
-                let results = await client.query(`SELECT COUNT(*) AS c FROM links WHERE shortlink=$1`, [shortCode])
+                let results = await pg.count().from('links').where({ shortlink: shortCode })
 
-                if (Number(results.rows[0].c) === 0) {
+                if (Number(results[0].count) === 0) {
                     // Link does not exist, so we are good to create it (using null owner since it was created by an anonymous user)
-                    const sql = `INSERT INTO links (owner_id, destination, shortlink) VALUES (NULL, $1, $2) RETURNING id, destination, shortlink`;
-                    const values = [args.destination, shortCode];
-                    let results = await client.query(sql, values)
+                    let results = await pg('links').insert({ destination: args.destination, shortlink: shortCode }).returning(['id', 'destination', 'shortlink'])
 
                     // Mark link as found
                     foundLink = true;
 
                     // Return this link
                     return {
-                        id: results.rows[0].id,
-                        destination: results.rows[0].destination,
-                        shortlink: results.rows[0].shortlink
+                        id: results[0].id,
+                        destination: results[0].destination,
+                        shortlink: results[0].shortlink
                     }
                 }
             }
@@ -68,9 +66,9 @@ export const resolvers = {
             }
 
             // Check if this email already exists in the database
-            let results = await client.query('SELECT COUNT(*) AS c FROM users WHERE email=$1', [args.email])
+            let results = await pg.count().from('users').where({ email: args.email })
 
-            if (Number(results.rows[0].c) > 0) {
+            if (Number(results[0].count) > 0) {
                 return { errorMessage: 'Email already exists' }
             }
 
@@ -78,10 +76,10 @@ export const resolvers = {
             const hashed_password = await bcrypt.hash(args.password, 10);
 
             // Create the user in the database
-            const c = await client.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id', [args.email, hashed_password])
+            const c = await pg('users').insert({ email: args.email, password: hashed_password }).returning(['id'])
 
             // Save the user's ID
-            const user_id = c.rows[0].id;
+            const user_id = c[0].id;
 
             // Sign jwt for this user, send back to them with their user id
             const jwt = jsonwebtoken.sign({ user_id }, process.env.JWT_SECRET)
@@ -95,15 +93,15 @@ export const resolvers = {
             }
 
             // Get this user's password from the database
-            let results = await client.query('SELECT id, password FROM users WHERE email=$1', [args.email])
+            let results = await pg('users').where({ email: args.email }).column('id', 'password').select()
 
-            if (results.rows.length === 0) {
+            if (results.length === 0) {
                 // No password found for the given email/user
                 return { errorMessage: 'No user with that email address found' }
             }
 
-            const user_id = results.rows[0].id;
-            const user_password = results.rows[0].password;
+            const user_id = results[0].id;
+            const user_password = results[0].password;
 
             // Compare given password to database password
             let match = await bcrypt.compare(args.password, user_password);

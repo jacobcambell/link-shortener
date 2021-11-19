@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server'
 import { resolvers } from './schema/resolvers'
 import { typeDefs } from './schema/type-defs'
-import { client } from './queries';
+import { pg } from './knex'
 
 require('dotenv').config()
 
@@ -15,18 +15,17 @@ server.listen({ port: process.env.GRAPHQL_SERVER_PORT }).then(({ port }) => {
 import Express, { Request, Response } from 'express'
 const app = Express()
 
-app.get('/:shortlink', (req: Request, res: Response) => {
+app.get('/:shortlink', async (req: Request, res: Response) => {
     const shortlink = req.params.shortlink;
 
-    // Get the destination from this shortlink
-    client.query('SELECT destination FROM links WHERE shortlink=$1', [shortlink]).then((results) => {
-        if (results.rows.length === 0) {
+    await pg('links').where({ shortlink: shortlink }).select('destination').then((data) => {
+        if (data.length === 0) {
             // No links found with the provided shortcode
             res.sendStatus(400)
             return;
         }
 
-        const destination = results.rows[0].destination;
+        const destination = data[0].destination;
 
         res.redirect(destination)
         return;
