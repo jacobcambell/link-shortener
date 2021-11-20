@@ -1,42 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoEarthOutline, IoCalendarOutline } from 'react-icons/io5'
 import { Bar } from 'react-chartjs-2'
 
-const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-        {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-        },
-    ],
-};
-
-const options = {
-    maintainAspectRatio: false
-};
-
 export default function Analytics() {
 
-    useEffect(() => {
+    // An array of strings containing date values for the past 7 days, i.e '11/14', '11/15', '11/16' etc
+    const [dates, setDates] = useState<string[]>([''])
 
+    // Array of numbers containing the number of clicks for the past 7 days, i.e 2, 5, 6, etc
+    const [numClicks, setNumClicks] = useState<number[]>([])
+
+    useEffect(() => {
     }, [])
 
     return (
@@ -57,7 +31,22 @@ export default function Analytics() {
                     </div>
                 </div>
                 <div className="w-5/6 h-full">
-                    <Bar data={data} options={options} className=""></Bar>
+                    <Bar data={{
+                        labels: dates,
+                        datasets: [
+                            {
+                                label: '# of Clicks',
+                                data: numClicks,
+                                backgroundColor: [
+                                    'rgba(16, 185, 129)'
+                                ],
+                                borderColor: [
+                                    'rgba(16, 185, 129)'
+                                ],
+                                borderWidth: 1,
+                            }
+                        ]
+                    }} options={{ maintainAspectRatio: false }} className=""></Bar>
                 </div>
             </div>
         </div>
