@@ -5,7 +5,16 @@ import { pg } from './knex'
 
 require('dotenv').config()
 
-const server = new ApolloServer({ typeDefs, resolvers })
+const server = new ApolloServer({
+    typeDefs, resolvers, context: ({ req }) => {
+        if (req.headers.authorization) {
+            if (req.headers.authorization.startsWith('Bearer ') && req.headers.authorization.split(' ').length === 2) {
+                // Save JWT to context for use in resolvers - note that it could be an invalid JWT, it's just what the user is claiming for this request
+                return { jwt: req.headers.authorization.split(' ')[1] }
+            }
+        }
+    }
+})
 
 server.listen({ port: process.env.GRAPHQL_SERVER_PORT }).then(({ port }) => {
     console.log('GraphQL server listening on port ' + port)
