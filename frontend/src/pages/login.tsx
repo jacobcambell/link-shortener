@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import Navbar from '../components/Navbar/Navbar';
-import { FaSpinner } from 'react-icons/fa'
-import logo from '../images/logo.png'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client';
 import { navigate } from 'gatsby-link';
+import React, { useState } from 'react';
+import { FaSpinner } from 'react-icons/fa';
+import Navbar from '../components/Navbar/Navbar';
+import logo from '../images/logo.png';
 
 const LOGIN_QUERY = gql`
     mutation Login($email: String!, $password: String!) {
