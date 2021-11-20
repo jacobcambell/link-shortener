@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import logo from '../../images/logo.png'
 
 export default function Navbar() {
     return (
         <div className='bg-white flex items-stretch  justify-between h-16 py-3 px-6'>
             <Link to='/' className=''>
-                <img src={`logo.png`} alt="Logo" className='h-full' />
+                <img src={logo} alt="Logo" className='h-full' />
             </Link>
 
             <div className="flex flex-row text-oxfordblue items-stretch">
