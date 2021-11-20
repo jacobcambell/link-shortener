@@ -1,13 +1,54 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Navbar from '../components/Navbar/Navbar';
 import { FaSpinner } from 'react-icons/fa'
 import logo from '../images/logo.png'
+import { gql, useMutation } from '@apollo/client'
+import { jwt_context } from '../components/JWT_Wrapper';
 
+const LOGIN_QUERY = gql`
+    mutation Login($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+            ... on Error {
+                errorMessage
+            }
+
+            ... on JWT {
+                token
+            }
+        }
+    }
+`
 export default function login() {
+
+    const { jwt, setJWT } = useContext(jwt_context)
+
+    const [tryLogin, { data, loading }] = useMutation(LOGIN_QUERY, {
+        onCompleted: (data) => {
+            if (data.login.errorMessage) {
+                setError(data.login.errorMessage)
+            }
+
+            if (data.login.token) {
+                // Save JWT to JWT wrapper
+                setJWT(data.login.token)
+            }
+        }
+    })
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
 
     const inputStyle = 'w-full border-cadetgrey border-0 border-b block my-3 py-2 text-oxfordblue select-none focus:outline-none placeholder-cadetgrey';
+
+    const handleClick = () => {
+        tryLogin({
+            variables: {
+                email,
+                password
+            }
+        })
+    }
 
     return (
         <div>
@@ -25,11 +66,12 @@ export default function login() {
                     className={inputStyle}
                 />
 
-                {/* {
-                    data?.registerAccount && <p className="text-red-500 mb-3">{data?.registerAccount.errorMessage}</p>
-                } */}
+                {
+                    error.length > 0 &&
+                    <p className="text-red-500">{error}</p>
+                }
 
-                <button className="bg-azure my-3 px-3 py-2 w-full text-white">{true ? <FaSpinner className="spinner m-auto" /> : 'Login'}</button>
+                <button onClick={handleClick} className="bg-azure my-3 px-3 py-2 w-full text-white">{loading ? <FaSpinner className="spinner m-auto" /> : 'Login'}</button>
             </div>
         </div>
     )
