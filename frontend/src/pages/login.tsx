@@ -42,6 +42,8 @@ export default function login() {
     const inputStyle = 'w-full border-cadetgrey border-0 border-b block my-3 py-2 text-oxfordblue select-none focus:outline-none placeholder-cadetgrey';
 
     const handleClick = () => {
+        setError('')
+
         tryLogin({
             variables: {
                 email,
