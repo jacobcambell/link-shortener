@@ -1,17 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import { IoEarthOutline, IoCalendarOutline } from 'react-icons/io5'
 import { Bar } from 'react-chartjs-2'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_ANALYTICS = gql`
+    query analytics {
+        globalAnalytics {
+            date
+            numClicks
+        }
+    }
+  `
+
+interface DateAnalytics {
+    date: string;
+    numClicks: number;
+}
 
 export default function Analytics() {
 
-    // An array of strings containing date values for the past 7 days, i.e '11/14', '11/15', '11/16' etc
-    const [dates, setDates] = useState<string[]>([''])
+    // An array of DateAnalytics objects
+    const [dates, setDates] = useState<DateAnalytics[]>([])
 
-    // Array of numbers containing the number of clicks for the past 7 days, i.e 2, 5, 6, etc
-    const [numClicks, setNumClicks] = useState<number[]>([])
+    const { loading } = useQuery(GET_ANALYTICS, {
+        context: {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+        }, onCompleted: (data) => {
+            if (data.globalAnalytics) {
+                setDates(data.globalAnalytics)
+            }
+        }
+    })
 
     useEffect(() => {
+
     }, [])
+
+    const getDates = () => {
+        return dates.map(d => d.date)
+    }
+    const getNumClicks = () => {
+        return dates.map(d => d.numClicks)
+    }
 
     return (
         <div className="px-10">
@@ -32,11 +64,11 @@ export default function Analytics() {
                 </div>
                 <div className="w-5/6 h-full">
                     <Bar data={{
-                        labels: dates,
+                        labels: getDates(),
                         datasets: [
                             {
                                 label: '# of Clicks',
-                                data: numClicks,
+                                data: getNumClicks(),
                                 backgroundColor: [
                                     'rgba(16, 185, 129)'
                                 ],
