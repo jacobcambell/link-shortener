@@ -1,12 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'gatsby'
 import logo from '../../images/logo.png'
-import { jwt_context } from '../JWT_Wrapper'
 import NoUser from './NoUser'
 import Logout from './Logout'
 
 export default function Navbar() {
-    const { jwt } = useContext(jwt_context)
 
     return (
         <div className='bg-white flex items-stretch  justify-between h-16 py-3 px-6'>
@@ -16,12 +14,12 @@ export default function Navbar() {
 
             {
                 // JWT is present, user is logged in
-                jwt.length > 0 &&
+                localStorage.getItem('access_token') !== null &&
                 <Logout></Logout>
             }
             {
                 // No JWT set, not logged in
-                jwt.length === 0 &&
+                localStorage.getItem('access_token') === null &&
                 <NoUser></NoUser>
             }
         </div>

@@ -1,13 +1,10 @@
-import React, { useContext } from 'react'
-import { jwt_context } from '../JWT_Wrapper'
+import React from 'react'
 import { navigate } from 'gatsby-link'
 
 export default function Logout() {
 
-    const { setJWT } = useContext(jwt_context)
-
     const handleLogout = () => {
-        setJWT('')
+        localStorage.removeItem('access_token')
 
         navigate('/login')
     }
