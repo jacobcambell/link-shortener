@@ -4,6 +4,7 @@ import { FaSpinner } from 'react-icons/fa'
 import logo from '../images/logo.png'
 import { gql, useMutation } from '@apollo/client'
 import { jwt_context } from '../components/JWT_Wrapper';
+import { navigate } from 'gatsby-link';
 
 const LOGIN_QUERY = gql`
     mutation Login($email: String!, $password: String!) {
@@ -31,6 +32,8 @@ export default function login() {
             if (data.login.token) {
                 // Save JWT to JWT wrapper
                 setJWT(data.login.token)
+
+                navigate('/dashboard')
             }
         }
     })
