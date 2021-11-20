@@ -16,10 +16,12 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.17",
+    "chart.js": "^3.6.0",
     "gatsby": "^4.2.0",
     "gatsby-plugin-apollo": "^3.0.2",
     "gatsby-plugin-sass": "^5.2.0",
     "react": "^17.0.1",
+    "react-chartjs-2": "^3.3.0",
     "react-dom": "^17.0.1",
     "react-icons": "^4.3.1",
     "sass": "^1.43.4"
