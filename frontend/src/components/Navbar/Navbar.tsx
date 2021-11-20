@@ -1,18 +1,29 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'gatsby'
 import logo from '../../images/logo.png'
+import { jwt_context } from '../JWT_Wrapper'
+import NoUser from './NoUser'
+import Logout from './Logout'
 
 export default function Navbar() {
+    const { jwt } = useContext(jwt_context)
+
     return (
         <div className='bg-white flex items-stretch  justify-between h-16 py-3 px-6'>
             <Link to='/' className=''>
                 <img src={logo} alt="Logo" className='h-full' />
             </Link>
 
-            <div className="flex flex-row text-oxfordblue items-stretch">
-                <Link to='/signup' className="bg-azure flex items-center text-white px-3 rounded-lg">Get Started</Link>
-                <Link to='/login' className="flex items-center mx-6">Log In</Link>
-            </div>
+            {
+                // JWT is present, user is logged in
+                jwt.length > 0 &&
+                <Logout></Logout>
+            }
+            {
+                // No JWT set, not logged in
+                jwt.length === 0 &&
+                <NoUser></NoUser>
+            }
         </div>
     )
 }
