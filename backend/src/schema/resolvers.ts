@@ -1,12 +1,48 @@
+require('dotenv').config()
 import { validURL, prependHttps, generateShortLink } from '../linktools'
 import * as EmailValidator from 'email-validator'
-import jsonwebtoken from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { pg } from '../knex'
 
 export const resolvers = {
     Query: {
+        globalAnalytics: async (parent, args, context) => {
+            interface DateAnalytics {
+                date: string;
+                numClicks: number;
+            }
 
+            let Analytics: DateAnalytics[] = [];
+
+            try {
+                let decoded: any = jwt.verify(context.jwt, process.env.JWT_SECRET);
+
+                const { user_id } = decoded;
+
+                // Loop through past 7 days and build array of DateAnalytics
+                for (let i = 0; i < 7; i++) {
+                    await pg.raw(`SELECT COUNT(*) FROM clicks, users, links WHERE DATE(clicks.click_time) = CURRENT_DATE - INTERVAL '${i} days' AND clicks.link_id=links.id AND links.owner_id=users.id AND users.id=? `, [user_id]).then((results) => {
+                        let day = new Date();
+                        let dd = String(day.getDate() - i).padStart(2, '0');
+                        let mm = String(day.getMonth() + 1).padStart(2, '0'); //January is 0!
+
+                        let finalDay = mm + '/' + dd;
+
+                        Analytics.push({
+                            date: finalDay,
+                            numClicks: results.rows[0].count
+                        })
+                    })
+                }
+
+                Analytics.reverse();
+                return Analytics;
+            }
+            catch (e) {
+
+            }
+        }
     },
     Mutation: {
         createShortLink: async (parent, args: { destination: string }) => {
@@ -82,9 +118,9 @@ export const resolvers = {
             const user_id = c[0].id;
 
             // Sign jwt for this user, send back to them with their user id
-            const jwt = jsonwebtoken.sign({ user_id }, process.env.JWT_SECRET)
+            const token = jwt.sign({ user_id }, process.env.JWT_SECRET)
 
-            return { token: jwt }
+            return { token }
         },
         login: async (parent, args: { email: string, password: string }) => {
             // Validate email
@@ -108,8 +144,8 @@ export const resolvers = {
 
             if (match) {
                 // Successful login, create JWT for this user and return to them
-                const jwt = jsonwebtoken.sign({ user_id }, process.env.JWT_SECRET)
-                return { token: jwt }
+                const token = jwt.sign({ user_id }, process.env.JWT_SECRET)
+                return { token }
             } else {
                 return { errorMessage: 'Incorrect email or password ' }
             }
