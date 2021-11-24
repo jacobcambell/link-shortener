@@ -2,7 +2,7 @@ import { gql } from "apollo-server"
 
 export const typeDefs = gql`
     type Query {
-        none: String!
+        globalAnalytics: [DateAnalytics!]!
     }
 
     type Mutation {
@@ -24,6 +24,11 @@ export const typeDefs = gql`
 
     type JWT {
         token: String!
+    }
+
+    type DateAnalytics {
+        date: String!
+        numClicks: Int!
     }
 
     union createShortLinkResults = Link | Error
