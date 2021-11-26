@@ -7,6 +7,20 @@ import { pg } from '../knex'
 
 export const resolvers = {
     Query: {
+        allLinks: async (parent, args, context) => {
+            try {
+                let decoded: any = jwt.verify(context.jwt, process.env.JWT_SECRET);
+
+                const { user_id } = decoded;
+
+                const links = await pg('links').select().where({ owner_id: user_id })
+
+                return links;
+            }
+            catch (e) {
+
+            }
+        },
         globalAnalytics: async (parent, args, context) => {
             interface DateAnalytics {
                 date: string;
