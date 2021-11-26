@@ -3,6 +3,7 @@ import { gql } from "apollo-server"
 export const typeDefs = gql`
     type Query {
         globalAnalytics: [DateAnalytics!]!
+        allLinks: [Link!]
     }
 
     type Mutation {
