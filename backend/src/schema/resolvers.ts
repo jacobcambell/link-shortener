@@ -83,7 +83,7 @@ export const resolvers = {
 
                 if (Number(results[0].count) === 0) {
                     // Link does not exist, so we are good to create it (using null owner since it was created by an anonymous user)
-                    let results = await pg('links').insert({ destination: args.destination, shortlink: shortCode }).returning(['id', 'destination', 'shortlink'])
+                    let results = await pg('links').insert({ destination: args.destination, shortlink: shortCode, created: 'NOW()' }).returning(['id', 'destination', 'shortlink'])
 
                     // Mark link as found
                     foundLink = true;
