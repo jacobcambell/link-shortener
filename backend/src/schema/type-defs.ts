@@ -21,6 +21,8 @@ export const typeDefs = gql`
         owner_id: ID
         destination: String!
         shortlink: String!
+        created: String!
+        name: String
     }
 
     type JWT {
