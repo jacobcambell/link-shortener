@@ -41,7 +41,7 @@ export default function LinkList() {
     })
 
     return (
-        <div className="flex flex-1 border border-t border-cadetgrey mt-5">
+        <div className="flex flex-1 border border-t border-cadetgrey" style={{ height: 'calc(50vh)' }}>
             <div className="w-1/3 overflow-y-scroll">
                 {
                     links &&

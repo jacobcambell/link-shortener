@@ -65,7 +65,7 @@ export default function Analytics() {
     }
 
     return (
-        <div className="px-10">
+        <div className="px-10" style={{ height: 'calc(50vh - 4rem)' }}>
             <div className="flex h-72">
                 <div className="w-1/6 h-full">
                     <div className="h-3/6 flex items-center justify-center flex-col bg-azure text-white">
