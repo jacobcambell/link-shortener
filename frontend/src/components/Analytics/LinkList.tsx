@@ -9,7 +9,10 @@ const ALL_LINKS_QUERY = gql`
             shortlink,
             created,
             destination
-            name
+            name,
+            analytics {
+                totalClicks
+            }
         }
     }
 `
@@ -19,7 +22,8 @@ type LinkType = {
     shortlink: string,
     created: string,
     destination: string
-    name: string
+    name: string,
+    analytics: { totalClicks: number }
 }
 
 export default function LinkList() {
@@ -30,7 +34,8 @@ export default function LinkList() {
             shortlink: '',
             created: '',
             destination: '',
-            name: ''
+            name: '',
+            analytics: { totalClicks: 0 }
         }
     ])
     const [selected, setSelected] = useState<number>(0)
@@ -38,6 +43,7 @@ export default function LinkList() {
     const { data } = useQuery(ALL_LINKS_QUERY, {
         onCompleted: (data) => {
             setLinks(data.allLinks)
+            console.log(data.allLinks)
         },
         onError: (err) => {
             console.log(err)
@@ -71,7 +77,7 @@ export default function LinkList() {
                 <p className="text-2xl">{links[selected].name ? links[selected].name : links[selected].destination}</p>
                 <a href={links[selected].destination} target="_blank" className="text-cadetgrey">{links[selected].destination}</a>
 
-                <p className="text-azure text-2xl mt-5"><FaChartBar className="inline mr-1 text-2xl" /> 0 total clicks</p>
+                <p className="text-azure text-2xl mt-5"><FaChartBar className="inline mr-1 text-2xl" /> {links[selected].analytics.totalClicks} total clicks</p>
             </div>
         </div>
     )
