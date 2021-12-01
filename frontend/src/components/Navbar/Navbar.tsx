@@ -17,7 +17,7 @@ export default function Navbar() {
                 // JWT is present, user is logged in
                 localStorage.getItem('access_token') !== null &&
                 <div className="flex items-center">
-                    <Link to="/dashboard" className='bg-azure text-white py-1 px-2 mr-3 flex items-center'><FaPlus className="inline mr-1" /> Create Link</Link>
+                    <Link to="/create-link" className='bg-azure text-white py-1 px-2 mr-3 flex items-center'><FaPlus className="inline mr-1" /> Create Link</Link>
                     <Logout></Logout>
                 </div>
             }
