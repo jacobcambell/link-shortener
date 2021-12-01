@@ -10,6 +10,7 @@ export const typeDefs = gql`
         createShortLink(destination: String!): createShortLinkResults!
         registerAccount(email: String!, password: String!): registerAccountResults!
         login(email: String!, password: String!): loginResults!
+        deleteLink(id: Int!): String
     }
 
     type Error {
