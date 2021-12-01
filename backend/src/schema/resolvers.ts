@@ -165,6 +165,15 @@ export const resolvers = {
             }
         }
     },
+    Link: {
+        analytics: async (parent, args, context) => {
+            const link_id = parent.id;
+
+            const totalClicks = await pg('clicks').count().where({ link_id })
+
+            return { totalClicks: totalClicks[0].count }
+        }
+    },
     createShortLinkResults: {
         __resolveType: (obj) => {
             if (obj.errorMessage) {
