@@ -3,6 +3,7 @@ import { Link } from 'gatsby'
 import logo from '../../images/logo.png'
 import NoUser from './NoUser'
 import Logout from './Logout'
+import { FaPlus } from 'react-icons/fa'
 
 export default function Navbar() {
 
@@ -15,7 +16,10 @@ export default function Navbar() {
             {
                 // JWT is present, user is logged in
                 localStorage.getItem('access_token') !== null &&
-                <Logout></Logout>
+                <div className="flex items-center">
+                    <Link to="/dashboard" className='bg-azure text-white py-1 px-2 mr-3 flex items-center'><FaPlus className="inline mr-1" /> Create Link</Link>
+                    <Logout></Logout>
+                </div>
             }
             {
                 // No JWT set, not logged in
