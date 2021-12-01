@@ -23,6 +23,7 @@ export const typeDefs = gql`
         shortlink: String!
         created: String!
         name: String
+        analytics: LinkAnalytics
     }
 
     type JWT {
@@ -32,6 +33,10 @@ export const typeDefs = gql`
     type DateAnalytics {
         date: String!
         numClicks: Int!
+    }
+
+    type LinkAnalytics {
+        totalClicks: Int!
     }
 
     union createShortLinkResults = Link | Error
