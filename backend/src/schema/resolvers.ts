@@ -163,6 +163,23 @@ export const resolvers = {
             } else {
                 return { errorMessage: 'Incorrect email or password ' }
             }
+        },
+        deleteLink: async (parent, args, context) => {
+            try {
+                let decoded: any = jwt.verify(context.jwt, process.env.JWT_SECRET);
+
+                const { user_id } = decoded;
+
+                const links = await pg('links').del().where({ id: args.id, owner_id: user_id })
+
+                return null;
+            }
+            catch (e) {
+
+            }
+
+
+            return null;
         }
     },
     Link: {
