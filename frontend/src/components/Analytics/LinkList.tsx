@@ -34,16 +34,7 @@ type LinkType = {
 
 export default function LinkList() {
 
-    const [links, setLinks] = useState<LinkType[]>([
-        {
-            id: 0,
-            shortlink: '',
-            created: '',
-            destination: '',
-            name: '',
-            analytics: { totalClicks: 0 }
-        }
-    ])
+    const [links, setLinks] = useState<LinkType[]>([])
     const [selected, setSelected] = useState<number>(0)
 
     const { data, refetch, loading } = useQuery(ALL_LINKS_QUERY, {
